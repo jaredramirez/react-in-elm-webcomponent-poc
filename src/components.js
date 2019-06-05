@@ -1,29 +1,9 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import registerCustomElement from "./registerCustomElement";
 
-WebComponents.waitFor(() => {
-  customElements.define(
-    "x-howdy",
-    class extends HTMLElement {
-      constructor() {
-        super();
-        this._message = this.message || "Howdy!";
-      }
-      get message() {
-        return this._message;
-      }
-      set message(newMessage) {
-        this._message = message;
-      }
-      connectedCallback() {
-        const mountPoint = document.createElement("div");
-        this.attachShadow({ mode: "open" }).appendChild(mountPoint);
+function Howdy(props) {
+  const message = props.getProperty("message") || "Howdy!";
+  return <span> {message}</span>;
+}
 
-        ReactDOM.render(<span>{this._message}</span>, mountPoint);
-      }
-      disconnectedCallback() {
-        ReactDOM.unmountComponentAtNode(this);
-      }
-    }
-  );
-});
+registerCustomElement(Howdy, "x-howdy");
